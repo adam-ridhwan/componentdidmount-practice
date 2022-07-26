@@ -15,27 +15,23 @@ class App extends Component {
       .then(data =>
         this.setState(() => {
           return { users: data.users };
-        }, console.log(this.state))
+        })
       );
   }
 
+  displayUsers() {
+    return this.state.users.map(user => {
+      const { id, firstName, lastName } = user;
+      return (
+        <div key={id}>
+          {firstName} {lastName}
+        </div>
+      );
+    });
+  }
+
   render() {
-    return (
-      <div>
-        <div>Hello </div>
-        <div>Bye </div>
-
-        {this.state.users.map(user => {
-          const { id, firstName, lastName } = user;
-
-          return (
-            <div key={id}>
-              {firstName} {lastName}
-            </div>
-          );
-        })}
-      </div>
-    );
+    return <div className='content'>{this.displayUsers()}</div>;
   }
 }
 
