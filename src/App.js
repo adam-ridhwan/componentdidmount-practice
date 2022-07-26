@@ -1,38 +1,44 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      users: [],
-    };
-  }
+const App = () => {
+  const [searchField, setSearchField] = useState('');
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUser] = useState([]);
+  // console.log(filteredUsers);
 
-  componentDidMount() {
-    fetch('https://dummyjson.com/users')
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
       .then(response => response.json())
-      .then(data =>
-        this.setState(() => {
-          return { users: data.users };
-        })
-      );
-  }
+      .then(data => setUsers(data));
+  }, []);
 
-  displayUsers() {
-    return this.state.users.map(user => {
-      const { id, firstName, lastName } = user;
-      return (
-        <div key={id}>
-          {firstName} {lastName}
-        </div>
-      );
+  useEffect(() => {
+    const newFilteredUsers = users.filter(user => {
+      return user.name.toLocaleLowerCase().includes(searchField);
     });
-  }
+    setFilteredUser(newFilteredUsers);
+  }, [users, searchField]);
 
-  render() {
-    return <div className='content'>{this.displayUsers()}</div>;
-  }
-}
+  const onSearchChange = event => {
+    const searchFieldString = event.target.value.toLocaleLowerCase();
+    setSearchField(searchFieldString);
+  };
+
+  return (
+    <div className='content'>
+      <div>
+        <input
+          onChange={onSearchChange}
+          placeholder='search for contact'
+        ></input>
+      </div>
+      {filteredUsers.map(user => {
+        const { id, name } = user;
+        return <div key={id}>{name}</div>;
+      })}
+    </div>
+  );
+};
 
 export default App;
