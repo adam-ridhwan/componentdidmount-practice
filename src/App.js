@@ -3,6 +3,8 @@ import './App.css';
 
 import debounce from 'lodash.debounce';
 
+import InputBar from './components/input/inputBar/inputBar';
+
 const API_URL = 'https://jsonplaceholder.typicode.com/users';
 
 const App = () => {
@@ -24,14 +26,10 @@ const App = () => {
         console.log(error);
       }
 
-      if (!ignore) {
-        setUsers(data);
-      }
+      if (!ignore) setUsers(data);
     })();
 
-    return () => {
-      ignore = true;
-    };
+    return () => (ignore = true);
   }, [searchField]);
 
   useEffect(() => {
@@ -58,18 +56,16 @@ const App = () => {
     return () => {
       debouncedChangeHandler.cancel();
     };
-  }, []);
+  }, [debouncedChangeHandler]);
 
   return (
     <>
       <h3>Small project using useState and useEffect hooks</h3>
+
       <div className='input-box'>
-        <input
-          type='text'
-          onChange={debouncedChangeHandler}
-          placeholder='Search for user'
-        />
+        <InputBar debouncedChangeHandler={debouncedChangeHandler} />
       </div>
+
       <div className='content'>
         {filteredUsers.map(user => {
           const { id, name } = user;
