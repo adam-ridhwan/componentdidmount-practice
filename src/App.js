@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import './App.css';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import debounce from 'lodash.debounce';
-
 import InputBar from './components/input/inputBar/inputBar';
+
+import './App.css';
 
 const API_URL = 'https://jsonplaceholder.typicode.com/users';
 
